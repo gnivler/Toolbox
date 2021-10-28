@@ -2,14 +2,16 @@ using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
 
+// ReSharper disable Global InconsistentNaming
+
 namespace Toolbox.Features
 {
     public static class QualityWaste
     {
-        // don't use better ingredients than needed  
+        // don't use better ingredients than needed
         [HarmonyPatch(typeof(Inventory), "GetItemsOfLowestToGreatestQuality")]
         [HarmonyPostfix]
-        public static void InventoryGetItemsOfLowestToGreatestQualityPostfix(ref List<ItemStack> __result, ItemStack.Quality quality)
+        public static void InventoryGetItemsOfLowestToGreatestQuality(ref List<ItemStack> __result, ItemStack.Quality quality)
         {
             if (Mod.WasteEnabled)
             {
@@ -17,12 +19,12 @@ namespace Toolbox.Features
             }
 
             __result = __result.Where(i => i.quality <= quality).ToList();
-            Mod.Log("GetItemsOfLowestToGreatestQuality " + __result);
+            //Mod.Log("GetItemsOfLowestToGreatestQuality " + __result);
         }
 
         [HarmonyPatch(typeof(Inventory), "GetItemCount")]
         [HarmonyPostfix]
-        public static void InventoryGetItemCountPostfix(Dictionary<string, List<ItemStack>> ___m_inventory, ref int __result, string itemKey, ItemStack.Quality quality)
+        public static void InventoryGetItemCount(Dictionary<string, List<ItemStack>> ___m_inventory, ref int __result, string itemKey, ItemStack.Quality quality)
         {
             if (Mod.WasteEnabled)
             {
@@ -42,13 +44,13 @@ namespace Toolbox.Features
                     }
                 }
 
-                Mod.Log("GetItemCount " + __result);
+                //Mod.Log("GetItemCount " + __result);
             }
         }
 
         [HarmonyPatch(typeof(ShelterInventoryManager), "GetLowestToHighestQuality")]
         [HarmonyPostfix]
-        public static void ShelterInventoryManagerGetLowestToHighestQualityPostfix(ref List<ItemStack> __result, ItemStack.Quality quality)
+        public static void ShelterInventoryManagerGetLowestToHighestQuality(ref List<ItemStack> __result, ItemStack.Quality quality)
         {
             if (Mod.WasteEnabled)
             {
@@ -56,7 +58,7 @@ namespace Toolbox.Features
             }
 
             __result = __result.Where(i => i.quality <= quality).ToList();
-            Mod.Log("GetLowestToHighestQuality " + __result);
+            //Mod.Log("GetLowestToHighestQuality " + __result);
         }
     }
 }

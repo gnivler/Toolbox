@@ -10,12 +10,9 @@ namespace Toolbox.Features
 
         private void Update()
         {
-            if (Time.timeScale > 0)
-            {
-                GameObject o;
-                (o = gameObject).transform.Translate(Vector3.up * (Time.deltaTime * Speed));
-                o.transform.localPosition += new Vector3(0, 1, 0);
-            }
+            GameObject o;
+            (o = gameObject).transform.Translate(Vector3.up * (Time.deltaTime * Speed));
+            o.transform.localPosition += new Vector3(0, 1, 0);
         }
     }
 
