@@ -5,16 +5,15 @@ namespace Toolbox.Features
 {
     public static class ExtraRecipes
     {
-        private static bool initialized;
+        internal static bool initialized;
         private static readonly List<CraftingRecipe> GoodQuality = new();
         private static readonly List<CraftingRecipe> ExcellentQuality = new();
 
         [HarmonyPatch(typeof(CraftingManager), "LoadAllRecipes")]
         [HarmonyPostfix]
-        public static void CraftingManagerLoadAllRecipesPostfix()
+        public static void CraftingManagerLoadAllRecipes()
         {
-            if (initialized
-                || !Mod.AddRecipes.Value)
+            if (initialized || !Mod.AddRecipes.Value)
             {
                 return;
             }
@@ -35,10 +34,13 @@ namespace Toolbox.Features
             {
                 CraftingManager.instance.m_recipes.Add(new CraftRecipeInstance(recipe));
             }
+
+            Mod.Log("Added recipes");
         }
 
         [HarmonyPatch(typeof(CraftingManager), "GetCraftQuality", typeof(MemberReferenceHolder), typeof(CraftingRecipe))]
-        public static void Postfix(MemberReferenceHolder memberRH, CraftingRecipe def, ref int __result)
+        [HarmonyPostfix]
+        public static void CraftingManagerGetCraftQuality (MemberReferenceHolder memberRH, CraftingRecipe def, ref int __result)
         {
             if (!Mod.AddRecipes.Value)
             {

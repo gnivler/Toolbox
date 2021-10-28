@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Reflection;
 using BepInEx;
@@ -31,6 +30,7 @@ namespace Toolbox
         private static ConfigEntry<KeyboardShortcut> WasteHotkey;
         internal static ConfigEntry<bool> AddRecipes;
         internal static ConfigEntry<bool> ChainBuild;
+        internal static ConfigEntry<bool> Banners;
         internal static bool WasteEnabled = true;
 
         private void Awake()
@@ -38,25 +38,28 @@ namespace Toolbox
             WasteHotkey = Config.Bind("Hotkey", "Waste Quality Materials", new KeyboardShortcut(KeyCode.F2), "Toggle allowed wasting of high level materials on lower level crafting");
             AddRecipes = Config.Bind("Toggle", "Add recipes (restart required)", true, "Add recipes to refine higher quality plastic, glass and rubber (restart required)");
             ChainBuild = Config.Bind("Toggle", "Chain Building", true, "Lets you hold CTRL while building objects to continue building more");
+            Banners = Config.Bind("Toggle", "Banner Messages", true, "Speeds up the messages across the top of the screen");
 
             if (AddRecipes.Value)
             {
-                GoodPlasticInput = Config.Bind("Adjustments", "Good Plastic Input", 25, new ConfigDescription("Amount for making Good quality", new AcceptableValueRange<int>(10, 200)));
-                ExcellentPlasticInput = Config.Bind("Adjustments", "Excellent Plastic Input", 25, new ConfigDescription("Amount for making Excellent quality", new AcceptableValueRange<int>(10, 200)));
-                GoodRubberInput = Config.Bind("Adjustments", "Good Rubber Input", 25, new ConfigDescription("Amount for making Good quality", new AcceptableValueRange<int>(10, 200)));
-                ExcellentRubberInput = Config.Bind("Adjustments", "Excellent Rubber Input", 25, new ConfigDescription("Amount for making Excellent quality", new AcceptableValueRange<int>(10, 200)));
-                GoodGlassInput = Config.Bind("Adjustments", "Good Glass Input", 25, new ConfigDescription("Amount for making Good quality", new AcceptableValueRange<int>(10, 200)));
-                ExcellentGlassInput = Config.Bind("Adjustments", "Excellent Glass Input", 25, new ConfigDescription("Amount for making Excellent quality", new AcceptableValueRange<int>(10, 200)));
+                GoodPlasticInput = Config.Bind("Adjustments", "Good Plastic Input", 20, new ConfigDescription("Amount for making Good quality", new AcceptableValueRange<int>(10, 100)));
+                ExcellentPlasticInput = Config.Bind("Adjustments", "Excellent Plastic Input", 10, new ConfigDescription("Amount for making Excellent quality", new AcceptableValueRange<int>(10, 100)));
+                GoodRubberInput = Config.Bind("Adjustments", "Good Rubber Input", 20, new ConfigDescription("Amount for making Good quality", new AcceptableValueRange<int>(10, 100)));
+                ExcellentRubberInput = Config.Bind("Adjustments", "Excellent Rubber Input", 10, new ConfigDescription("Amount for making Excellent quality", new AcceptableValueRange<int>(10, 100)));
+                GoodGlassInput = Config.Bind("Adjustments", "Good Glass Input", 20, new ConfigDescription("Amount for making Good quality", new AcceptableValueRange<int>(10, 100)));
+                ExcellentGlassInput = Config.Bind("Adjustments", "Excellent Glass Input", 10, new ConfigDescription("Amount for making Excellent quality", new AcceptableValueRange<int>(10, 100)));
             }
 
             Harmony harmony = new("ca.gnivler.sheltered2.Toolbox");
             LogFile = Path.Combine(new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName!, "log.txt");
             dev = SystemInfo.deviceName == "MEOWMEOW";
             Log("Toolbox Startup");
+            Log(new string('=', 80));
             harmony.PatchAll(typeof(Patches));
             harmony.PatchAll(typeof(ChainBuild));
             harmony.PatchAll(typeof(ExtraRecipes));
-            harmony.PatchAll(typeof(Fading));
+            harmony.PatchAll(typeof(BannerMessages));
+            harmony.PatchAll(typeof(QualityWaste));
         }
 
         private void Update()
@@ -72,18 +75,50 @@ namespace Toolbox
                 scrollRt.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, x);
                 floatie.AddComponent<FloatieBehaviour>();
                 floatie.AddComponent<FadeText>();
-                floatie.transform.SetParent(Fading.LogPanel.transform.parent);
+                floatie.transform.SetParent(BannerMessages.LogPanel.transform.parent);
                 floatie.transform.position = new Vector3(x - scrollRt.rect.x / 2, y, 0);
                 if (WasteEnabled)
                 {
                     WasteEnabled = false;
                     text.SetText("NOT WASTING QUALITY MATERIALS");
+                    if (PanelManager.instance.GetTopPanel() is CraftingPanel craftingPanel)
+                    {
+                        DoThings(craftingPanel);
+                    }
+
+                    if (Time.timeScale == 0)
+                    {
+                        // fare thee well, cpu cycles
+                        Destroy(floatie);
+                    }
+
                     return;
                 }
 
-                WasteEnabled = true;
-                text.SetText($"CAN WASTE QUALITY MATERIALS");
-                return;
+                {
+                    WasteEnabled = true;
+                    text.SetText("CAN WASTE QUALITY MATERIALS");
+                    if (PanelManager.instance.GetTopPanel() is CraftingPanel craftingPanel)
+                    {
+                        DoThings(craftingPanel);
+                    }
+
+                    if (Time.timeScale == 0)
+                    {
+                        Destroy(floatie);
+                    }
+
+                    return;
+                }
+
+                void DoThings(CraftingPanel craftingPanel)
+                {
+                    var last = craftingPanel.m_recipeGrid.m_lastHovered;
+                    craftingPanel.DisplayRecipes(craftingPanel.m_selectedLevel);
+                    craftingPanel.m_recipeGrid.m_lastHovered = last;
+                    last.ToggleLastSelected(true);
+                    craftingPanel.m_recipeGrid.m_itemButtonOnHover(last, craftingPanel.m_recipeGrid, true);
+                }
             }
 
             if (!dev)

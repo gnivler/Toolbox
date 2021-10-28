@@ -11,19 +11,20 @@ namespace Toolbox.Features
 
         [HarmonyPatch(typeof(CraftingManager), "StartCraft", typeof(CraftRecipeInstance), typeof(Member), typeof(Object_Base))]
         [HarmonyPostfix]
-        public static void CraftingManagerStartCraftPostfix(CraftRecipeInstance recipe, bool __result)
+        public static void CraftingManagerStartCraft(CraftRecipeInstance recipe)
         {
             if (!Mod.ChainBuild.Value)
             {
                 return;
             }
 
-            Mod.Log("Recipe captured");
+            Mod.Log("StartCraft " + recipe.def);
             recipeInstance = recipe;
         }
 
         [HarmonyPatch(typeof(InteractionManager), "PlaceCraftingObject")]
-        public static void Postfix(CraftRecipeInstance __state)
+        [HarmonyPostfix]
+        public static void InteractionManagerPlaceCraftingObject()
         {
             if (!Mod.ChainBuild.Value)
             {
@@ -32,16 +33,35 @@ namespace Toolbox.Features
 
             if ((Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
                 && recipeInstance is not null
-                && !placementObject.CollidingDuringPlacement)
+                && !placementObject.CollidingDuringPlacement
+                && ShelterInventoryManager.instance.ContainsItems(recipeInstance.ingredients))
             {
                 Mod.Log(recipeInstance?.def);
                 CraftingManager.instance.StartCraft(recipeInstance, InteractionManager.instance.SelectedMember.member);
             }
         }
 
+        [HarmonyPatch(typeof(InteractionManager), "PlaceRoom")]
+        [HarmonyPostfix]
+        public static void InteractionManagerPlaceRoom()
+        {
+            if (!Mod.ChainBuild.Value)
+            {
+                return;
+            }
+
+            if ((Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
+                && recipeInstance is not null
+                && ShelterInventoryManager.instance.ContainsItems(recipeInstance.ingredients))
+            {
+                Mod.Log(recipeInstance?.def);
+                CraftingManager.instance.StartCraft(recipeInstance, InteractionManager.instance.SelectedMember.member);
+            }
+        }
 
         [HarmonyPatch(typeof(InteractionManager), "StartCraftingPlacement", typeof(CraftRecipeInstance), typeof(List<ItemStack>))]
-        public static void Postfix()
+        [HarmonyPostfix]
+        public static void InteractionManagerStartCraftingPlacement()
         {
             if (!Mod.ChainBuild.Value)
             {
