@@ -31,6 +31,7 @@ namespace Toolbox
         internal static ConfigEntry<bool> AddRecipes;
         internal static ConfigEntry<bool> ChainBuild;
         internal static ConfigEntry<bool> Banners;
+        internal static ConfigEntry<bool> Flicker;
         internal static bool WasteEnabled = true;
 
         private void Awake()
@@ -39,6 +40,7 @@ namespace Toolbox
             AddRecipes = Config.Bind("Toggle", "Add recipes (restart required)", true, "Add recipes to refine higher quality plastic, glass and rubber (restart required)");
             ChainBuild = Config.Bind("Toggle", "Chain Building", true, "Lets you hold CTRL while building objects to continue building more");
             Banners = Config.Bind("Toggle", "Banner Messages", true, "Speeds up the messages across the top of the screen");
+            Flicker = Config.Bind("Toggle", "Fluorescent Flickering", true, "Disables the flickering");
 
             if (AddRecipes.Value)
             {
@@ -60,6 +62,7 @@ namespace Toolbox
             harmony.PatchAll(typeof(ExtraRecipes));
             harmony.PatchAll(typeof(BannerMessages));
             harmony.PatchAll(typeof(QualityWaste));
+            harmony.PatchAll(typeof(FluorescentFlicker));
         }
 
         private void Update()
