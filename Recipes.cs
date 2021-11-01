@@ -17,7 +17,7 @@ namespace Toolbox
             recipe.m_type = CraftingRecipe.OutputType.Item;
             recipe.m_randomIngredientsPool = new();
             recipe.m_factionSkillCheck = FactionAchievementManager.AchievementType.Null;
-            recipe.m_descriptionKey = "Good Plastic";
+            recipe.m_descriptionKey = "Toolbox Good Plastic";
             recipe.m_recipeLevel = 1;
             recipe.m_outputCount = 1;
             recipe.m_recipeType = CraftingRecipe.RecipeType.BasicItems;
@@ -38,7 +38,7 @@ namespace Toolbox
             recipe.m_type = CraftingRecipe.OutputType.Item;
             recipe.m_randomIngredientsPool = new();
             recipe.m_factionSkillCheck = FactionAchievementManager.AchievementType.Null;
-            recipe.m_descriptionKey = "Excellent Plastic";
+            recipe.m_descriptionKey = "Toolbox Excellent Plastic";
             recipe.m_recipeLevel = 2;
             recipe.m_outputCount = 1;
             recipe.m_recipeType = CraftingRecipe.RecipeType.BasicItems;
@@ -59,7 +59,7 @@ namespace Toolbox
             recipe.m_type = CraftingRecipe.OutputType.Item;
             recipe.m_randomIngredientsPool = new();
             recipe.m_factionSkillCheck = FactionAchievementManager.AchievementType.Null;
-            recipe.m_descriptionKey = "Good Rubber";
+            recipe.m_descriptionKey = "Toolbox Good Rubber";
             recipe.m_recipeLevel = 1;
             recipe.m_outputCount = 1;
             recipe.m_recipeType = CraftingRecipe.RecipeType.BasicItems;
@@ -80,7 +80,7 @@ namespace Toolbox
             recipe.m_type = CraftingRecipe.OutputType.Item;
             recipe.m_randomIngredientsPool = new();
             recipe.m_factionSkillCheck = FactionAchievementManager.AchievementType.Null;
-            recipe.m_descriptionKey = "Excellent Rubber";
+            recipe.m_descriptionKey = "Toolbox Good Rubber";
             recipe.m_recipeLevel = 2;
             recipe.m_outputCount = 1;
             recipe.m_recipeType = CraftingRecipe.RecipeType.BasicItems;
@@ -101,7 +101,7 @@ namespace Toolbox
             recipe.m_type = CraftingRecipe.OutputType.Item;
             recipe.m_randomIngredientsPool = new();
             recipe.m_factionSkillCheck = FactionAchievementManager.AchievementType.Null;
-            recipe.m_descriptionKey = "Good Glass";
+            recipe.m_descriptionKey = "Toolbox Good Glass";
             recipe.m_recipeLevel = 1;
             recipe.m_outputCount = 1;
             recipe.m_recipeType = CraftingRecipe.RecipeType.BasicItems;
@@ -122,11 +122,93 @@ namespace Toolbox
             recipe.m_type = CraftingRecipe.OutputType.Item;
             recipe.m_randomIngredientsPool = new();
             recipe.m_factionSkillCheck = FactionAchievementManager.AchievementType.Null;
-            recipe.m_descriptionKey = "Excellent Glass";
+            recipe.m_descriptionKey = "Toolbox Good Glass";
             recipe.m_recipeLevel = 2;
             recipe.m_outputCount = 1;
             recipe.m_recipeType = CraftingRecipe.RecipeType.BasicItems;
             recipe.m_objectSprite = ItemManager.items["Glass"].sprite;
+            recipe.m_unlockedByDefault = true;
+            return recipe;
+        }
+        internal static CraftingRecipe GoodWoodRecipe()
+        {
+            var recipe = ScriptableObject.CreateInstance<CraftingRecipe>();
+            recipe.m_ingredients = new List<ItemStack> { new("Wood", ItemStack.Quality.Poor, Mod.GoodWoodInput.Value) };
+            recipe.m_nameKey = "Good Wood";
+            recipe.m_outputItem = ItemManager.items["Wood"];
+            recipe.m_baseCraftTime = 5;
+            recipe.name = "Good Wood";
+            recipe.ID = "Good Wood";
+            recipe.m_type = CraftingRecipe.OutputType.Item;
+            recipe.m_randomIngredientsPool = new();
+            recipe.m_factionSkillCheck = FactionAchievementManager.AchievementType.Null;
+            recipe.m_descriptionKey = "Toolbox Good Wood";
+            recipe.m_recipeLevel = 1;
+            recipe.m_outputCount = 1;
+            recipe.m_recipeType = CraftingRecipe.RecipeType.BasicItems;
+            recipe.m_objectSprite = ItemManager.items["Wood"].sprite;
+            recipe.m_unlockedByDefault = true;
+            return recipe;
+        }
+
+        internal static CraftingRecipe ExcellentWoodRecipe()
+        {
+            var recipe = ScriptableObject.CreateInstance<CraftingRecipe>();
+            recipe.m_ingredients = new List<ItemStack> { new("Wood", ItemStack.Quality.Good, Mod.ExcellentWoodInput.Value) };
+            recipe.m_nameKey = "Excellent Wood";
+            recipe.m_outputItem = ItemManager.items["Wood"];
+            recipe.m_baseCraftTime = 5;
+            recipe.name = "Excellent Wood";
+            recipe.ID = "Excellent Wood";
+            recipe.m_type = CraftingRecipe.OutputType.Item;
+            recipe.m_randomIngredientsPool = new();
+            recipe.m_factionSkillCheck = FactionAchievementManager.AchievementType.Null;
+            recipe.m_descriptionKey = "Toolbox Good Wood";
+            recipe.m_recipeLevel = 2;
+            recipe.m_outputCount = 1;
+            recipe.m_recipeType = CraftingRecipe.RecipeType.BasicItems;
+            recipe.m_objectSprite = ItemManager.items["Wood"].sprite;
+            recipe.m_unlockedByDefault = true;
+            return recipe;
+        }
+        internal static CraftingRecipe GoodSiliconRecipe()
+        {
+            var recipe = ScriptableObject.CreateInstance<CraftingRecipe>();
+            recipe.m_ingredients = new List<ItemStack> { new("Silicon", ItemStack.Quality.Poor, Mod.GoodSiliconInput.Value) };
+            recipe.m_nameKey = "Good Silicon";
+            recipe.m_outputItem = ItemManager.items["Silicon"];
+            recipe.m_baseCraftTime = 5;
+            recipe.name = "Good Silicon";
+            recipe.ID = "Good Silicon";
+            recipe.m_type = CraftingRecipe.OutputType.Item;
+            recipe.m_randomIngredientsPool = new();
+            recipe.m_factionSkillCheck = FactionAchievementManager.AchievementType.Null;
+            recipe.m_descriptionKey = "Toolbox Good Silicon";
+            recipe.m_recipeLevel = 1;
+            recipe.m_outputCount = 1;
+            recipe.m_recipeType = CraftingRecipe.RecipeType.BasicItems;
+            recipe.m_objectSprite = ItemManager.items["Silicon"].sprite;
+            recipe.m_unlockedByDefault = true;
+            return recipe;
+        }
+
+        internal static CraftingRecipe ExcellentSiliconRecipe()
+        {
+            var recipe = ScriptableObject.CreateInstance<CraftingRecipe>();
+            recipe.m_ingredients = new List<ItemStack> { new("Silicon", ItemStack.Quality.Good, Mod.ExcellentSiliconInput.Value) };
+            recipe.m_nameKey = "Excellent Silicon";
+            recipe.m_outputItem = ItemManager.items["Silicon"];
+            recipe.m_baseCraftTime = 5;
+            recipe.name = "Excellent Silicon";
+            recipe.ID = "Excellent Silicon";
+            recipe.m_type = CraftingRecipe.OutputType.Item;
+            recipe.m_randomIngredientsPool = new();
+            recipe.m_factionSkillCheck = FactionAchievementManager.AchievementType.Null;
+            recipe.m_descriptionKey = "Toolbox Excellent Silicon";
+            recipe.m_recipeLevel = 2;
+            recipe.m_outputCount = 1;
+            recipe.m_recipeType = CraftingRecipe.RecipeType.BasicItems;
+            recipe.m_objectSprite = ItemManager.items["Silicon"].sprite;
             recipe.m_unlockedByDefault = true;
             return recipe;
         }

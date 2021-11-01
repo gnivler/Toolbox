@@ -1,3 +1,4 @@
+using System.Linq;
 using HarmonyLib;
 using Toolbox.Features;
 
@@ -9,7 +10,7 @@ namespace Toolbox
         [HarmonyPostfix]
         public static void OptionsPanelOnQuitToMainMenuConfirmPostfix()
         {
-            ExtraRecipes.initialized = false;
+            ExtraRecipes.Initialized = false;
         }
 
         [HarmonyPatch(typeof(SaveManager), "LoadFromCurrentSlot")]
@@ -18,7 +19,19 @@ namespace Toolbox
         {
             Mod.Log("Load game");
             Mod.Log(new string('=', 80));
-            ExtraRecipes.initialized = false;
+            ExtraRecipes.Initialized = false;
+        }
+
+        [HarmonyPatch(typeof(CraftingPanel), "DisplayRecipeDetails")]
+        [HarmonyPostfix]
+        public static void CraftingPanelDisplayRecipeDetails(CraftingPanel __instance, CraftRecipeInstance craftingRecipe)
+        {
+            if (!string.IsNullOrEmpty(craftingRecipe.def.descriptionKey)
+                && craftingRecipe.def.descriptionKey.Contains("Toolbox"))
+            {
+                var text = craftingRecipe.def.descriptionKey.Substring(8);
+                __instance.m_itemDescriptionText.text = text;
+            }
         }
     }
 }

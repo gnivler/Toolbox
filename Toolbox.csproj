@@ -36,11 +36,15 @@
     </PropertyGroup>
     <ItemGroup>
         <Compile Include="Features\ChainBuild.cs" />
+        <Compile Include="Features\Cheats.cs" />
         <Compile Include="Features\ExtraRecipes.cs" />
         <Compile Include="Features\BannerMessages.cs" />
         <Compile Include="Features\FluoresentFlicker.cs" />
+        <Compile Include="Features\MapSize.cs" />
         <Compile Include="Features\QualityWaste.cs" />
         <Compile Include="Features\FloatieBehaviour.cs" />
+        <Compile Include="Fixes.cs" />
+        <Compile Include="Helper.cs" />
         <Compile Include="Mod.cs" />
         <Compile Include="Patches.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
@@ -55,6 +59,9 @@
       </Reference>
       <Reference Include="BepInEx, Version=5.4.17.0, Culture=neutral, PublicKeyToken=null">
         <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Sheltered 2\BepInEx\core\BepInEx.dll</HintPath>
+      </Reference>
+      <Reference Include="FMODUnity, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Sheltered 2\Sheltered2_Data\Managed\FMODUnity.dll</HintPath>
       </Reference>
       <Reference Include="NavMeshComponents, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
         <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Sheltered 2\Sheltered2_Data\Managed\NavMeshComponents.dll</HintPath>

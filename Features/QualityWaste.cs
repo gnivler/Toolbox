@@ -18,6 +18,9 @@ namespace Toolbox.Features
                 return;
             }
 
+            Mod.Log("wtaf");
+            Mod.Log(__result.Count);
+            __result.Do(r => Mod.Log($"{r.def.name} {r.amount} {r.quality}"));
             __result = __result.Where(i => i.quality <= quality).ToList();
             //Mod.Log("GetItemsOfLowestToGreatestQuality " + __result);
         }
@@ -36,9 +39,8 @@ namespace Toolbox.Features
             {
                 for (var i = 0; i < ___m_inventory[itemKey].Count; i++)
                 {
-                    if (___m_inventory[itemKey][i] != null
-                        && (___m_inventory[itemKey][i].quality == quality
-                            || quality == ItemStack.Quality.Any))
+                    if (___m_inventory[itemKey][i] is not null
+                        && (___m_inventory[itemKey][i].quality == quality || quality == ItemStack.Quality.Any))
                     {
                         __result += ___m_inventory[itemKey][i].amount;
                     }
@@ -48,17 +50,17 @@ namespace Toolbox.Features
             }
         }
 
-        [HarmonyPatch(typeof(ShelterInventoryManager), "GetLowestToHighestQuality")]
-        [HarmonyPostfix]
-        public static void ShelterInventoryManagerGetLowestToHighestQuality(ref List<ItemStack> __result, ItemStack.Quality quality)
-        {
-            if (Mod.WasteEnabled)
-            {
-                return;
-            }
-
-            __result = __result.Where(i => i.quality <= quality).ToList();
-            //Mod.Log("GetLowestToHighestQuality " + __result);
-        }
+        //[HarmonyPatch(typeof(ShelterInventoryManager), "GetLowestToHighestQuality")]
+        //[HarmonyPostfix]
+        //public static void ShelterInventoryManagerGetLowestToHighestQuality(ref List<ItemStack> __result, ItemStack.Quality quality)
+        //{
+        //    if (Mod.WasteEnabled)
+        //    {
+        //        return;
+        //    }
+        //
+        //    __result = __result.Where(i => i.quality <= quality).ToList();
+        //    //Mod.Log("GetLowestToHighestQuality " + __result);
+        //}
     }
 }

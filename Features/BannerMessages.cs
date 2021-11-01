@@ -4,7 +4,7 @@ namespace Toolbox.Features
 {
     public static class BannerMessages
     {
-        internal static ActivityLogPanel LogPanel = default;
+        internal static ActivityLogPanel LogPanel;
 
         // reduce message fading time ActivityLogPanel
         [HarmonyPatch(typeof(ActivityLogPanel), "Awake")]
