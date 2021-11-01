@@ -5,7 +5,7 @@ namespace Toolbox.Features
 {
     public static class ExtraRecipes
     {
-        internal static bool initialized;
+        internal static bool Initialized;
         private static readonly List<CraftingRecipe> GoodQuality = new();
         private static readonly List<CraftingRecipe> ExcellentQuality = new();
 
@@ -13,18 +13,42 @@ namespace Toolbox.Features
         [HarmonyPostfix]
         public static void CraftingManagerLoadAllRecipes()
         {
-            if (initialized || !Mod.AddRecipes.Value)
+            if (Initialized || !Mod.AddRecipes.Value)
             {
                 return;
             }
 
-            initialized = true;
-            GoodQuality.Add(Recipes.GoodPlasticRecipe());
-            GoodQuality.Add(Recipes.GoodRubberRecipe());
-            GoodQuality.Add(Recipes.GoodGlassRecipe());
-            ExcellentQuality.Add(Recipes.ExcellentPlasticRecipe());
-            ExcellentQuality.Add(Recipes.ExcellentRubberRecipe());
-            ExcellentQuality.Add(Recipes.ExcellentGlassRecipe());
+            Initialized = true;
+            if (Mod.AddRecipesPlastic.Value)
+            {
+                GoodQuality.Add(Recipes.GoodPlasticRecipe());
+                ExcellentQuality.Add(Recipes.ExcellentPlasticRecipe());
+            }
+
+            if (Mod.AddRecipesRubber.Value)
+            {
+                GoodQuality.Add(Recipes.GoodRubberRecipe());
+                ExcellentQuality.Add(Recipes.ExcellentRubberRecipe());
+            }
+
+            if (Mod.AddRecipesGlass.Value)
+            {
+                GoodQuality.Add(Recipes.GoodGlassRecipe());
+                ExcellentQuality.Add(Recipes.ExcellentGlassRecipe());
+            }
+
+            if (Mod.AddRecipesWood.Value)
+            {
+                GoodQuality.Add(Recipes.GoodWoodRecipe());
+                ExcellentQuality.Add(Recipes.ExcellentWoodRecipe());
+            }
+
+            if (Mod.AddRecipesSilicon.Value)
+            {
+                GoodQuality.Add(Recipes.GoodSiliconRecipe());
+                ExcellentQuality.Add(Recipes.ExcellentSiliconRecipe());
+            }
+
             foreach (var recipe in GoodQuality)
             {
                 CraftingManager.instance.m_recipes.Add(new CraftRecipeInstance(recipe));
@@ -40,7 +64,7 @@ namespace Toolbox.Features
 
         [HarmonyPatch(typeof(CraftingManager), "GetCraftQuality", typeof(MemberReferenceHolder), typeof(CraftingRecipe))]
         [HarmonyPostfix]
-        public static void CraftingManagerGetCraftQuality (MemberReferenceHolder memberRH, CraftingRecipe def, ref int __result)
+        public static void CraftingManagerGetCraftQuality(MemberReferenceHolder memberRH, CraftingRecipe def, ref int __result)
         {
             if (!Mod.AddRecipes.Value)
             {

@@ -34,9 +34,17 @@ namespace Toolbox.Features
             if ((Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
                 && recipeInstance is not null
                 && !placementObject.CollidingDuringPlacement
-                && ShelterInventoryManager.instance.ContainsItems(recipeInstance.ingredients))
+                && (Cheats.Cheat || ShelterInventoryManager.instance.ContainsItems(recipeInstance.ingredients)))
             {
                 Mod.Log(recipeInstance?.def);
+                if (Cheats.Cheat)
+                {
+                    foreach (var ingredient in recipeInstance.ingredients)
+                    {
+                        ShelterInventoryManager.instance.AddItems(ingredient);
+                    }
+                }
+
                 CraftingManager.instance.StartCraft(recipeInstance, InteractionManager.instance.SelectedMember.member);
             }
         }
@@ -52,15 +60,21 @@ namespace Toolbox.Features
 
             if ((Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
                 && recipeInstance is not null
-                && ShelterInventoryManager.instance.ContainsItems(recipeInstance.ingredients))
+                && (Cheats.Cheat || ShelterInventoryManager.instance.ContainsItems(recipeInstance.ingredients)))
             {
                 Mod.Log(recipeInstance?.def);
+                if (Cheats.Cheat)
+                {
+                    foreach (var ingredient in recipeInstance.ingredients)
+                    {
+                        ShelterInventoryManager.instance.AddItems(ingredient);
+                    }
+                }
+
                 CraftingManager.instance.StartCraft(recipeInstance, InteractionManager.instance.SelectedMember.member);
             }
         }
 
-        
-        
         [HarmonyPatch(typeof(InteractionManager), "StartCraftingPlacement", typeof(CraftRecipeInstance), typeof(List<ItemStack>))]
         [HarmonyPostfix]
         public static void InteractionManagerStartCraftingPlacement()
